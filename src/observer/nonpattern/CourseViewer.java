@@ -46,6 +46,7 @@ public class CourseViewer extends JFrame implements ActionListener,
 		coursePanel.setLayout(new GridLayout(0, 1));
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.BOTH;
+		
 
 		scrollPane = new JScrollPane(coursePanel,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -81,6 +82,9 @@ public class CourseViewer extends JFrame implements ActionListener,
 		// the bar chart will be drawn over this panel
 		this.getContentPane().add(new JPanel(), constraints);
 		this.setVisible(true);
+		
+		
+		this.pack();
 	}
 
 	/**
@@ -126,6 +130,7 @@ public class CourseViewer extends JFrame implements ActionListener,
 			this.coursePanel.revalidate();
 			this.repaint();
 			this.setVisible(true);
+			this.setSize(750,750);
 		}
 	}
 
@@ -149,6 +154,27 @@ public class CourseViewer extends JFrame implements ActionListener,
 							* LayoutConstants.barSpacing + i
 							* LayoutConstants.barWidth, LayoutConstants.yOffset
 							+ LayoutConstants.graphHeight + 20);
+		}
+	
+
+		int radius = 100;
+		
+		//first compute the total number of students
+		double total = 0.0;
+		for (int i = 0; i < sliders.size(); i++) {
+			total += sliders.elementAt(i).getValue();
+		}
+		//if total == 0 nothing to draw
+		if (total != 0) {
+			double startAngle = 0.0;
+			for (int i = 0; i < sliders.size(); i++) {
+				double ratio = (sliders.elementAt(i).getValue() / total) * 360.0;
+				//draw the arc
+				g.setColor(LayoutConstants.subjectColors[i%LayoutConstants.subjectColors.length]);
+				g.fillArc(LayoutConstants.xOffset, LayoutConstants.yOffset + 300, 2 * radius, 2 * radius, (int) startAngle, (int) ratio);
+				startAngle += ratio;
+			
+		}
 		}
 	}
 
